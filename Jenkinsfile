@@ -26,7 +26,8 @@ pipeline {
             steps {
                 // Run Robot Framework with output file options
                 sh '''
-                python3 -m robot --output output.xml --log log.html --report report.html --junitxml results.xml tests/login_avec_template_data.robot
+                sh 'python3 -m robot --output output.xml --log log.html --report report.html tests/login_avec_template_data.robot'
+
                 '''
             }
         }
@@ -34,7 +35,7 @@ pipeline {
         stage('Publish Test Results') {
             steps {
                 // Publish JUnit results from the generated results.xml
-                junit '**/results.xml'
+                junit '**/output.xml'
 
                 // Archive the Robot Framework HTML report and log for debugging
                 archiveArtifacts artifacts: '**/report.html, **/log.html', allowEmptyArchive: true

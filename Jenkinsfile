@@ -32,8 +32,9 @@ pipeline {
 
         stage('Publish Test Results') {
             steps {
-                junit '**/output.xml'
-                archiveArtifacts artifacts: '**/report.html', allowEmptyArchive: true
+                //junit '**/output.xml'
+                junit '**/results.xml'
+                //archiveArtifacts artifacts: '**/report.html', allowEmptyArchive: true
             }
         }
     }

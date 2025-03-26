@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        ROBOT_DIR = 'tests'  
+        ROBOT_DIR = 'tests'  // Directory containing your Robot Framework test files
     }
 
     stages {
@@ -24,24 +24,27 @@ pipeline {
 
         stage('Run Robot Framework Tests') {
             steps {
-                
-              //  sh  'python3 -m robot tests/login_avec_template_data.robot'
-             sh 'python3 -m robot --output output.xml --log log.html --report report.html --junitxml results.xml tests/login_avec_template_data.robot'  
+                // Run Robot Framework with output file options
+                sh '''
+                python3 -m robot --output output.xml --log log.html --report report.html --junitxml results.xml tests/login_avec_template_data.robot
+                '''
             }
         }
 
         stage('Publish Test Results') {
             steps {
-                //junit '**/output.xml'
+                // Publish JUnit results from the generated results.xml
                 junit '**/results.xml'
-                //archiveArtifacts artifacts: '**/report.html', allowEmptyArchive: true
+
+                // Archive the Robot Framework HTML report and log for debugging
+                archiveArtifacts artifacts: '**/report.html, **/log.html', allowEmptyArchive: true
             }
         }
     }
 
     post {
         always {
-            cleanWs()
+            cleanWs()  // Clean workspace after pipeline execution
         }
     }
 }
